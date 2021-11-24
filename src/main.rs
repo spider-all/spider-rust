@@ -1,4 +1,10 @@
-use rusqlite::{params, Connection, Result};
+use rusqlite::{params, Connection};
+use serde::{Deserialize, Serialize};
+use serde_json;
+
+use std::error::Error;
+use std::fs::File;
+use std::io::BufReader;
 
 #[derive(Debug)]
 struct Person {
@@ -7,7 +13,26 @@ struct Person {
     data: Option<Vec<u8>>,
 }
 
-fn main() -> Result<()> {
+#[derive(Serialize, Deserialize)]
+struct Config {
+    entry: String,
+    token: String,
+}
+
+fn config() -> Result<Config, Box<dyn Error>> {
+    let file = File::open("./config.json")?;
+    let reader = BufReader::new(file);
+
+    let data = serde_json::from_reader(reader)?;
+
+    Ok(data)
+}
+
+fn main() -> rusqlite::Result<()> {
+    let config = config().unwrap();
+    print!("{}", config.entry);
+    print!("{}", config.token);
+
     let conn = Connection::open_in_memory()?;
 
     conn.execute(

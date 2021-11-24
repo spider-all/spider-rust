@@ -2,13 +2,13 @@
 
 Crawl GitHub APIs and store the discovered orgs, repos, commits...
 
-### Run in terminal
+## Run in terminal
 
 ``` bash
 cargo run
 ```
 
-### Run in docker
+## Run in docker
 
 ``` bash
 
